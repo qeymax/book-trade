@@ -2,20 +2,20 @@
       <div class="ui grid">
         <div class="sixteen wide mobile five wide tablet five wide computer column">
           <div class="logoContainer">
-            <img class="logo" src="/img/logo.png" alt="">
+            <a href="/"><img class="logo" src="/img/logo.png" alt=""></a>
           </div>
         </div>
-        <div class="seven wide mobile four wide tablet five wide computer column ">
+        <div class="four wide mobile three wide tablet three wide computer column ">
           <div class="ui menuList horizontal list">
-            <a class="item" href="/">Home</a>
             <a class="item" href="/books">Books</a>
           </div>
         </div>
-        <div class="nine wide mobile seven wide tablet six wide computer column right aligned">
+        <div class="twelve wide mobile eight wide tablet eight wide computer column right aligned">
           <div class="ui menuList horizontal list">
           <% if(currentUser) {%>
             <a class="item" href="#">Requests</a>
-            <a class="item" href="#">Profile</a>
+            <a class="item" href="/user/<%= currentUser._id %>/books">My Books</a>
+            <a class="item" href="/user/edit">Profile</a>
             <a class="item" href="/logout">Logout</a>
           <% } else {%> 
             <a class="item" href="/register">Register</a>

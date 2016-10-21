@@ -12,6 +12,7 @@ var User = require('./models/user')
 
 var indexRoutes = require('./routes/index')
 var booksRoutes = require('./routes/books')
+var userRoutes = require('./routes/user')
 
 mongoose.connect(config.DBUrl, function (err) {
   if (err) {
@@ -50,6 +51,7 @@ app.use(function (req, res, next) {
 
 app.use(indexRoutes)
 app.use(booksRoutes)
+app.use(userRoutes)
 
 app.listen(process.env.PORT || 3000, function () {
   console.log('server started')

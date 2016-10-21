@@ -6,11 +6,14 @@ html {
 body {
   padding-top: 30px;
   padding-bottom: 0px;
-  min-height: 800px;
 }
 
 html * {
   font-family: 'Cairo', sans-serif;
+}
+
+.ui.container {
+  min-height: 63.5vh;
 }
 
 .topBar>.ui.grid,
@@ -84,6 +87,21 @@ html * {
 #loginForm {
   background-color: #FFF;
   padding: 30px;
+}
+
+#addNewBook {
+  width: 160px;
+  height: 40px !important;
+  background-color: #FFF;
+  margin-bottom: 20px;
+}
+
+#addNewBook>a {
+  background-color: #FFF;
+}
+
+#addNewBook>.bookName {
+  display: none;
 }
 
 .footer {
