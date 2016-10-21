@@ -6,6 +6,7 @@ html {
 body {
   padding-top: 30px;
   padding-bottom: 0px;
+  min-height: 800px;
 }
 
 html * {
@@ -52,12 +53,6 @@ html * {
   color: #FFF !important;
 }
 
-.searchBar {
-  background-color: #FFF;
-  height: 40px;
-  padding: 10px 10px;
-}
-
 .head {
   text-align: center;
   margin: 30px auto 60px auto;
@@ -81,12 +76,14 @@ html * {
   font-weight: 400;
 }
 
-.sideBar>form>h3 {
-  font-weight: 300 !important;
+#registerForm {
+  background-color: #FFF;
+  padding: 30px;
 }
 
-.checkbox {
-  padding: 5px !important;
+#loginForm {
+  background-color: #FFF;
+  padding: 30px;
 }
 
 .footer {

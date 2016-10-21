@@ -13,9 +13,14 @@
         </div>
         <div class="nine wide mobile seven wide tablet six wide computer column right aligned">
           <div class="ui menuList horizontal list">
-            <a class="item" href="#">Register</a>
-            <a class="item" href="#">Register</a>
-            <a class="item" href="#">Login</a>
+          <% if(currentUser) {%>
+            <a class="item" href="#">Requests</a>
+            <a class="item" href="#">Profile</a>
+            <a class="item" href="/logout">Logout</a>
+          <% } else {%> 
+            <a class="item" href="/register">Register</a>
+            <a class="item" href="/login">Login</a>
+          <%}%>    
           </div>
         </div>
       </div>
