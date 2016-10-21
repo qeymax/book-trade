@@ -1,9 +1,15 @@
 var express = require('express')
 var app = express()
-var request = require('request')
+var bodyParser = require('body-parser')
 var path = require('path')
 var config = require('./config')
 var mongoose = require('mongoose')
+var passport = require('passport')
+var LocalStrategy = require('passport-local')
+
+var User = require('./models/user')
+
+var indexRoutes = require('./routes/index')
 
 mongoose.connect(config.DBUrl, function (err) {
   if (err) {
@@ -13,24 +19,26 @@ mongoose.connect(config.DBUrl, function (err) {
   }
 })
 
+app.use(bodyParser.urlencoded({
+  extended: true
+}))
+app.use(express.static(path.join(__dirname, '/public')))
+app.set('view engine', 'ejs')
 
+//  Passport config
+app.use(require('express-session')({
+  secret: config.passportSecret,
+  resave: false,
+  saveUninitialized: false
+}))
+app.use(passport.initialize())
+app.use(passport.session())
+passport.use(new LocalStrategy(User.authenticate()))
+passport.serializeUser(User.serializeUser())
+passport.deserializeUser(User.deserializeUser())
+  //  ---------------------
 
-app.get('/', function (req, res) {
-  res.sendFile(path.join(__dirname, '/views/index.html'))
-})
-
-app.post('/', function (req, res) {
-  let bookName = 'alchemist'
-  let url = `https://www.googleapis.com/books/v1/volumes?q=${bookName}&maxResults=5&key=AIzaSyBhCDWa_59Ncnq-HbtSNstn68RKkOSPXQY`
-  request(url, function (err, response, body) {
-    if (err) {
-      console.log(err)
-    }
-    let obj = JSON.parse(body)
-    console.log(obj.items[0].volumeInfo.title)
-    res.send(body)
-  })
-})
+app.use(indexRoutes)
 
 app.listen(process.env.PORT || 3000, function () {
   console.log('server started')

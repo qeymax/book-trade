@@ -1,7 +1,7 @@
 var mongoose = require('mongoose')
 var Schema = mongoose.Schema
 
-var requestModel = mongoose.model('Request', new Schema({
+var requestSchema = new Schema({
   status: String,
   sender: [{
     type: Schema.Types.ObjectId,
@@ -19,6 +19,7 @@ var requestModel = mongoose.model('Request', new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Book'
   }]
-}))
+})
+var requestModel = mongoose.model('Request', requestSchema)
 
 module.exports = requestModel

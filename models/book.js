@@ -1,7 +1,7 @@
 var mongoose = require('mongoose')
 var Schema = mongoose.Schema
 
-var bookModel = mongoose.model('Book', new Schema({
+var bookSchema = new Schema({
   title: String,
   author: [String],
   categories: [String],
@@ -13,6 +13,7 @@ var bookModel = mongoose.model('Book', new Schema({
     type: Schema.Types.ObjectId,
     ref: 'User'
   }
-}))
+})
+var bookModel = mongoose.model('Book', bookSchema)
 
 module.exports = bookModel
