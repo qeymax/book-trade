@@ -1,3 +1,5 @@
+var User = require('../models/user')
+
 var middlewareObj = {}
 
 // middlewareObj.checkCampOwnership = function (req, res, next) {
@@ -34,9 +36,12 @@ middlewareObj.checkRegister = function (req, res, next) {
   let email = req.body.email
   let country = req.body.country
   let fullname = req.body.fullname
+  let terms = req.body.terms
 
   if (emailExisted(email)) {
     req.flash('error', 'Email Already Existed')
+  } else if (checkEmpty(password)) {
+    req.flash('error', 'Password is required')
   } else if (checkEmpty(email)) {
     req.flash('error', 'Email is required')
   } else if (!passwordMatch(password, repeatPassword)) {
@@ -45,6 +50,8 @@ middlewareObj.checkRegister = function (req, res, next) {
     req.flash('error', 'Full Name is required')
   } else if (checkEmpty(country)) {
     req.flash('error', 'Country is required')
+  } else if (!terms) {
+    req.flash('error', 'YOU HAVE TO AGREE!!!')
   } else {
     req.flash('success', 'Registration Completed Successfully')
     return next()
@@ -52,8 +59,61 @@ middlewareObj.checkRegister = function (req, res, next) {
   res.redirect('/register')
 }
 
+middlewareObj.checkProfile = function (req, res, next) {
+  let newPassword = req.body.newpassword
+  let repeatPassword = req.body.repeatpassword
+  let email = req.body.email
+  let country = req.body.country
+  let fullname = req.body.fullname
+
+  if (emailExistedProfile(req.user.email, email)) {
+    req.flash('error', 'Email Already Existed')
+  } else if (checkEmpty(email)) {
+    req.flash('error', 'Email is required')
+  } else if (!passwordMatch(newPassword, repeatPassword)) {
+    req.flash('error', 'Password does not match')
+  } else if (checkEmpty(fullname)) {
+    req.flash('error', 'Full Name is required')
+  } else if (checkEmpty(country)) {
+    req.flash('error', 'Country is required')
+  } else {
+    return next()
+  }
+  res.redirect('/user/edit')
+}
+
 var emailExisted = function (email) {
-  return false
+  User.findOne({
+    email: email
+  }, function (err, user) {
+    if (err) {
+      console.log(err)
+    }
+    if (user) {
+      return true
+    } else {
+      return false
+    }
+  })
+}
+
+var emailExistedProfile = function (oldemail, email) {
+  if (oldemail === email) {
+    return false
+  } else {
+    User.findOne({
+      email: email
+    }, function (err, user) {
+      if (err) {
+        console.log(err)
+      }
+      if (user) {
+        return true
+      } else {
+        return false
+      }
+    })
+  }
 }
 
 var checkEmpty = function (field) {

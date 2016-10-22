@@ -12,7 +12,7 @@ html * {
   font-family: 'Cairo', sans-serif;
 }
 
-.ui.container {
+.page {
   min-height: 63.5vh;
 }
 
@@ -96,12 +96,9 @@ html * {
   margin-bottom: 20px;
 }
 
-#addNewBook>a {
-  background-color: #FFF;
-}
-
-#addNewBook>.bookName {
-  display: none;
+#addNewBookGrid {
+  min-height: 400px !important;
+  background-color: #F1F2F4;
 }
 
 .footer {

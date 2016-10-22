@@ -1,0 +1,14 @@
+<% for(var volume of volumes) { %>
+
+  <div class="sixteen wide mobile eight wide tablet five wide computer column">
+    <div class="card">
+      <div class="image">
+        <img class="thumbnail" src="<%= volume.thumbnail %>">
+      </div>
+      <a>
+        <h5><%= volume.title %></h5>
+      </a>
+    </div>
+  </div>
+
+<% } %>

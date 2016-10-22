@@ -4,11 +4,12 @@ var Schema = mongoose.Schema
 var bookSchema = new Schema({
   title: String,
   author: [String],
-  categories: [String],
+  genre: [String],
   thumbnail: String,
   language: String,
   publishedDate: String,
   averageRating: Number,
+  description: String,
   user: {
     type: Schema.Types.ObjectId,
     ref: 'User'

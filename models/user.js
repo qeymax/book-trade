@@ -7,7 +7,7 @@ var userSchema = new Schema({
   password: String,
   fullname: String,
   email: String,
-  Country: String,
+  country: String,
   sentRequests: [{
     type: Schema.Types.ObjectId,
     ref: 'Request'
