@@ -3,6 +3,7 @@
 
   <% include ./partials/topbar.ejs %>
     <% include ./partials/flash.ejs %>
+    <% if(currentUser){ %>
       <div class="ui modal addBookModal">
         <div class="header">Add a New Book
           <div style="float:right"><i class="ui close grey icon link closeModal"></i></div>
@@ -23,10 +24,15 @@
           </div>
         </div>
         </div>
+        <% } %>
         <h1>USERNAME's Books</h1>
         <br>
         <br>
-        <a id="addNewBook" class="ui large button" style="">Add New Book</a>
+
+        <% if(currentUser){ %>
+          <a id="addNewBook" class="ui large button" style="">Add New Book</a>
+         <% } %>
+        
         <div class="ui grid booksGrid">
 
           <div class="sixteen wide mobile eight wide tablet four wide computer column">
