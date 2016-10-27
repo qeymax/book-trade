@@ -1,6 +1,7 @@
 var router = require('express').Router()
 var User = require('../models/user')
 var middleware = require('../middleware')
+var Book = require('../models/book')
   // var request = require('request')
   // var path = require('path')
 var passport = require('passport')
@@ -37,9 +38,34 @@ router.route('/user/edit')
       })
     })
 
-router.route('/user/:id/books')
+router.route('/user/:username/books')
   .get(function (req, res) {
-    res.render('user-books')
+    User
+      .findOne({
+        username: req.params.username
+      })
+      .exec(function (err, user) {
+        if (err) {
+          console.log(err)
+        } else {
+          Book
+            .find({
+              user: user._id
+            })
+            .sort({
+              date: -1
+            }).exec(function (err, books) {
+              if (err) {
+                console.log(err)
+              } else {
+                res.render('user-books', {
+                  volumes: books,
+                  username: user.username
+                })
+              }
+            })
+        }
+      })
   })
 
 module.exports = router

@@ -15,10 +15,6 @@ var userSchema = new Schema({
   recievedRequests: [{
     type: Schema.Types.ObjectId,
     ref: 'Request'
-  }],
-  books: [{
-    type: Schema.Types.ObjectId,
-    ref: 'Book'
   }]
 })
 userSchema.plugin(passportLocalMongoose)

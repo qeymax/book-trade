@@ -14,7 +14,7 @@
           <div class="ui menuList horizontal list">
           <% if(currentUser) {%>
             <a class="item" href="#">Requests</a>
-            <a class="item" href="/user/<%= currentUser._id %>/books">My Books</a>
+            <a class="item" href="/user/<%= currentUser.username %>/books">My Books</a>
             <a class="item" href="/user/edit">Profile</a>
             <a class="item" href="/logout">Logout</a>
           <% } else {%> 

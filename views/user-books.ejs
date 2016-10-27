@@ -25,7 +25,7 @@
         </div>
         </div>
         <% } %>
-        <h1>USERNAME's Books</h1>
+        <h1><%= username %>'s Books</h1>
         <br>
         <br>
 
@@ -35,60 +35,38 @@
         
         <div class="ui grid booksGrid">
 
-          <div class="sixteen wide mobile eight wide tablet four wide computer column">
-            <div class="card">
-              <div class="image">
-                <img class="thumbnail" src="http://books.google.com/books/content?id=FEL8DlqjYEkC&printsec=frontcover&img=1&zoom=2&source=gbs_api"
-                  alt="">
-              </div>
-              <a href="#">
-                <h5>The Alchemist</h5>
-              </a>
-              <div class="ui divider"></div>
-              <p>Fiction, Fiction, Genre</p>
+          <% for(var volume of volumes) { %> 
+            <div class="sixteen wide mobile eight wide tablet four wide computer column">
+              <div id="<%= volume._id %>" class="card bookCard">
+                <div class="image">
+                  <img class="thumbnail" src="<%= volume.thumbnail %>">
+                </div>
+                <h5><%= volume.title %></h5>
+                
             </div>
           </div>
-          <div class="sixteen wide mobile eight wide tablet four wide computer column">
-            <div class="card">
-              <div class="image">
-                <img class="thumbnail" src="http://books.google.com/books/content?id=FEL8DlqjYEkC&printsec=frontcover&img=2&zoom=2&source=gbs_api"
-                  alt="">
-              </div>
-              <a href="#">
-                <h5>The Alchemist</h5>
-              </a>
-              <div class="ui divider"></div>
-              <p>Fiction, Fiction, Genre</p>
-            </div>
-          </div>
-          <div class="sixteen wide mobile eight wide tablet four wide computer column">
-            <div class="card">
-              <div class="image">
-                <img class="thumbnail" src="http://books.google.com/books/content?id=FEL8DlqjYEkC&printsec=frontcover&img=1&zoom=2&source=gbs_api"
-                  alt="">
-              </div>
-              <a href="#">
-                <h5>The Alchemist</h5>
-              </a>
-              <div class="ui divider"></div>
-              <p>Fiction, Fiction, Genre</p>
-            </div>
-          </div>
-          <div class="sixteen wide mobile eight wide tablet four wide computer column">
-            <div class="card">
-              <div class="image">
-                <img class="thumbnail" src="http://books.google.com/books/content?id=FEL8DlqjYEkC&printsec=frontcover&img=1&zoom=2&source=gbs_api"
-                  alt="">
-              </div>
-              <a href="#">
-                <h5>The Alchemist</h5>
-              </a>
-              <div class="ui divider"></div>
-              <p>Fiction, Fiction, Genre</p>
-            </div>
-          </div>
+          
+          <% } %> 
         </div>
 
+<div class="ui large modal" >
+  <div class="header">
+    <span class="bookNameSpan"></span>
+    <div style="float:right"><i class="ui close grey icon link closeModal"></i></div>
+  </div>
+  <div class="ui image content segment" style="min-height:500px !important;margin:0 !important;">
+    
+  </div>
+  <% if(currentUser) { %>
+  <div class="actions">
+    <div class="ui button">Request Trade</div>
+  </div>
+  <% } else { %>
+  <div class="actions">
+    <a href="/login" class="ui button">Login to request this book!</a>
+  </div>
+  <% } %>
+</div>
 
 
 

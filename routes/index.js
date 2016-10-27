@@ -4,10 +4,32 @@ var router = require('express').Router()
 var passport = require('passport')
 var User = require('../models/user')
 var middleware = require('../middleware')
+var Book = require('../models/book')
 
 router.route('/')
   .get(function (req, res) {
-    res.render('index')
+    Book
+      .find({})
+      .sort({
+        date: -1
+      })
+      .limit(4)
+      .exec(function (err, books) {
+        if (err) {
+          console.log(err)
+        } else {
+          Book.count({}, function (err, count) {
+            if (err) {
+              console.log(err)
+            } else {
+              res.render('index', {
+                volumes: books,
+                count: count
+              })
+            }
+          })
+        }
+      })
   })
 
 router.route('/login')

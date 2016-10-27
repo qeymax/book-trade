@@ -39,7 +39,9 @@ router.route('/books')
             console.log(err)
           } else {
             for (let gen of req.body.genre) {
-              meta.genres.push(gen)
+              if (meta.genres.indexOf(gen) === -1) {
+                meta.genres.push(gen)
+              }
             }
             if (meta.languages.indexOf(req.body.language) === -1) {
               meta.languages.push(req.body.language)
@@ -71,7 +73,7 @@ router.route('/addbooks')
               thumbnail = thumbnail.join('&')
             }
             let subtitle = volumeInfo.subtitle ? ' - ' + volumeInfo.subtitle : ''
-            let description = volumeInfo.description ? volumeInfo.description.substring(0, 100) + '....' : ''
+            let description = volumeInfo.description ? volumeInfo.description.substring(0, 200) + '....' : ''
             let volume = {
               title: volumeInfo.title.split('-')[0] + subtitle,
               author: volumeInfo.authors,
@@ -147,7 +149,7 @@ router.route('/books/:page')
             if (err) {
               console.log(err)
             } else {
-              pagesCount = Math.ceil(count / 10)
+              pagesCount = Math.ceil(count / 9)
               if (typeof req.query.genre === 'string') {
                 reqGenres.push(req.query.genre)
               } else {
@@ -171,8 +173,8 @@ router.route('/books/:page')
                     $in: req.query.language ? reqLanguages : languages
                   }
                 })
-                .limit(10)
-                .skip((req.params.page - 1) * 10)
+                .limit(9)
+                .skip((req.params.page - 1) * 9)
                 .sort(sort)
                 .exec(function (err, books) {
                   if (err) {
