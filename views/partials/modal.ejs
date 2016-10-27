@@ -8,7 +8,7 @@
             <p class="key">Owner:</p>
           </div>
           <div class="twelve wide column">
-            <a class="owner" href="#"><%= volume.user.username %></a>
+            <a class="owner" href="/user/<%= volume.user._id %>/books"><%= volume.user.username %></a>
           </div>
         </div>
 
@@ -27,6 +27,15 @@
           </div>
           <div class="twelve wide column">
             <p><%= volume.averageRating %></p>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="four wide column">
+            <p class="key">Genres:</p>
+          </div>
+          <div class="twelve wide column">
+            <p><%= volume.genre.join(', ') %></p>
           </div>
         </div>
 

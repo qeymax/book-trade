@@ -10,6 +10,7 @@ var bookSchema = new Schema({
   publishedDate: String,
   averageRating: Number,
   description: String,
+  date: Date,
   user: {
     type: Schema.Types.ObjectId,
     ref: 'User'

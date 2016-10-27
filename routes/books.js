@@ -2,24 +2,13 @@ var router = require('express').Router()
 var request = require('request')
 var middleware = require('../middleware')
 var Book = require('../models/book')
+var Meta = require('../models/meta')
   // var path = require('path')
   // var passport = require('passport')
 
 router.route('/books')
   .get(function (req, res) {
-    Book.find({})
-      .limit(10).sort({
-        title: -1
-      })
-      .exec(function (err, books) {
-        if (err) {
-          console.log(err)
-        } else {
-          res.render('books', {
-            volumes: books
-          })
-        }
-      })
+    res.redirect('/books/1')
   })
   .post(middleware.isLoggedIn,
     function (req, res) {
@@ -32,6 +21,7 @@ router.route('/books')
         publishedDate: req.body.publishedDate,
         averageRating: req.body.averageRating,
         description: req.body.description,
+        date: Date.now(),
         user: req.user
       })
       newBook.save(function (err, book) {
@@ -41,7 +31,22 @@ router.route('/books')
           console.log('new book saved to database : ', book.title)
         }
       })
-      console.log(req.body.title)
+      Meta
+        .findOne({
+          name: 'meta'
+        }, function (err, meta) {
+          if (err) {
+            console.log(err)
+          } else {
+            for (let gen of req.body.genre) {
+              meta.genres.push(gen)
+            }
+            if (meta.languages.indexOf(req.body.language) === -1) {
+              meta.languages.push(req.body.language)
+            }
+            meta.save()
+          }
+        })
       res.end()
     })
 
@@ -106,6 +111,86 @@ router.route('/bookinfo')
         }
       })
     }
+  })
+
+router.route('/books/:page')
+  .get(function (req, res) {
+    var languages = []
+    var genres = []
+    var reqLanguages = []
+    var reqGenres = []
+    var pagesCount
+    var sort = {}
+    if (typeof req.query.sort === 'undefined') {
+      sort['date'] = -1
+    } else {
+      if (req.query.sort === 'Oldest') {
+        sort['date'] = 1
+      } else if (req.query.sort === 'Hrating') {
+        sort['averageRating'] = -1
+      } else if (req.query.sort === 'Lrating') {
+        sort['averageRating'] = 1
+      } else {
+        sort['date'] = -1
+      }
+    }
+    Meta
+      .findOne({
+        name: 'meta'
+      }, function (err, meta) {
+        if (err) {
+          console.log(err)
+        } else {
+          languages = meta.languages
+          genres = meta.genres
+          Book.count({}, function (err, count) {
+            if (err) {
+              console.log(err)
+            } else {
+              pagesCount = Math.ceil(count / 10)
+              if (typeof req.query.genre === 'string') {
+                reqGenres.push(req.query.genre)
+              } else {
+                reqGenres = req.query.genre
+              }
+              if (typeof req.query.language === 'string') {
+                reqLanguages.push(req.query.language)
+              } else {
+                reqLanguages = req.query.language
+              }
+              var token = new RegExp(req.query.search, 'i')
+              Book
+                .find({
+                  title: {
+                    $regex: req.query.search ? token : ''
+                  },
+                  genre: {
+                    $in: req.query.genre ? reqGenres : genres
+                  },
+                  language: {
+                    $in: req.query.language ? reqLanguages : languages
+                  }
+                })
+                .limit(10)
+                .skip((req.params.page - 1) * 10)
+                .sort(sort)
+                .exec(function (err, books) {
+                  if (err) {
+                    console.log(err)
+                  } else {
+                    res.render('books', {
+                      volumes: books,
+                      currentPage: parseInt(req.params.page),
+                      lastPage: pagesCount,
+                      genres: genres,
+                      languages: languages
+                    })
+                  }
+                })
+            }
+          })
+        }
+      })
   })
 
 module.exports = router

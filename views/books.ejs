@@ -10,10 +10,10 @@
 
     <div class="ui computer reversed tablet reversed grid">
       <div class="sixteen wide mobile four wide tablet four wide computer column sideBar">
-        <form method="POST">
+        <form method="GET">
           <div class="searchBar">
             <div class="ui transparent big fluid icon input">
-              <input type="text" placeholder="Search">
+              <input type="text" placeholder="Search" name="search">
               <i class="search icon"></i>
             </div>
           </div>
@@ -26,25 +26,25 @@
               <div class="grouped fields">
                 <div class="field">
                   <div class="ui radio checkbox">
-                    <input type="radio" name="sort" checked=true tabindex="0" class="hidden">
+                    <input type="radio" name="sort" checked=true tabindex="0" value="Newest" class="hidden">
                     <label>Newest</label>
                   </div>
                 </div>
                 <div class="field">
                   <div class="ui radio checkbox">
-                    <input type="radio" name="sort" tabindex="0" class="hidden">
+                    <input type="radio" name="sort" tabindex="0" value="Oldest" class="hidden">
                     <label>Oldest</label>
                   </div>
                 </div>
                 <div class="field">
                   <div class="ui radio checkbox">
-                    <input type="radio" name="sort" tabindex="0" class="hidden">
+                    <input type="radio" name="sort" tabindex="0" value="Hrating" class="hidden">
                     <label>Hieghest Rated</label>
                   </div>
                 </div>
                 <div class="field">
                   <div class="ui radio checkbox">
-                    <input type="radio" name="sort" tabindex="0" class="hidden">
+                    <input type="radio" name="sort" tabindex="0" value="Lrating" class="hidden">
                     <label>Lowest Rated</label>
                   </div>
                 </div>
@@ -55,42 +55,14 @@
             </div>
             <div class="content">
               <div class="grouped fields">
-                <div class="field">
+              <% for (let genre of genres) { %> 
+              <div class="field">
                   <div class="ui checkbox">
-                    <input type="checkbox" name="genre" tabindex="0" class="hidden">
-                    <label>Genre</label>
+                    <input type="checkbox" name="genre" value="<%= genre %>" tabindex="0" class="hidden">
+                    <label><%= genre %></label>
                   </div>
                 </div>
-                <div class="field">
-                  <div class="ui checkbox">
-                    <input type="checkbox" name="genre" tabindex="0" class="hidden">
-                    <label>Genre</label>
-                  </div>
-                </div>
-                <div class="field">
-                  <div class="ui checkbox">
-                    <input type="checkbox" name="genre" tabindex="0" class="hidden">
-                    <label>Genre</label>
-                  </div>
-                </div>
-                <div class="field">
-                  <div class="ui checkbox">
-                    <input type="checkbox" name="genre" tabindex="0" class="hidden">
-                    <label>Genre</label>
-                  </div>
-                </div>
-                <div class="field">
-                  <div class="ui checkbox">
-                    <input type="checkbox" name="genre" tabindex="0" class="hidden">
-                    <label>Genre</label>
-                  </div>
-                </div>
-                <div class="field">
-                  <div class="ui checkbox">
-                    <input type="checkbox" name="genre" tabindex="0" class="hidden">
-                    <label>Genre</label>
-                  </div>
-                </div>
+              <% } %>             
               </div>
             </div>
 
@@ -99,42 +71,15 @@
             </div>
             <div class="content">
               <div class="grouped fields">
-                <div class="field">
+              <% for (let language of languages) { %> 
+              <div class="field">
                   <div class="ui checkbox">
-                    <input type="checkbox" name="language" tabindex="0" class="hidden">
-                    <label>Language</label>
+                    <input type="checkbox" name="language" value="<%= language %>" tabindex="0" class="hidden">
+                    <label><%= language %></label>
                   </div>
                 </div>
-                <div class="field">
-                  <div class="ui checkbox">
-                    <input type="checkbox" name="language" tabindex="0" class="hidden">
-                    <label>Language</label>
-                  </div>
-                </div>
-                <div class="field">
-                  <div class="ui checkbox">
-                    <input type="checkbox" name="language" tabindex="0" class="hidden">
-                    <label>Language</label>
-                  </div>
-                </div>
-                <div class="field">
-                  <div class="ui checkbox">
-                    <input type="checkbox" name="language" tabindex="0" class="hidden">
-                    <label>Language</label>
-                  </div>
-                </div>
-                <div class="field">
-                  <div class="ui checkbox">
-                    <input type="checkbox" name="language" tabindex="0" class="hidden">
-                    <label>Language</label>
-                  </div>
-                </div>
-                <div class="field">
-                  <div class="ui checkbox">
-                    <input type="checkbox" name="language" tabindex="0" class="hidden">
-                    <label>Language</label>
-                  </div>
-                </div>
+              <% } %>
+                
               </div>
             </div>
           </div>
@@ -142,7 +87,7 @@
           <div class="ui fluid buttons">
             <button class="ui purple button">APPLY</button>
             <div class="or"></div>
-            <a href="#" class="ui button">RESET</a>
+            <a href="/books" class="ui button">RESET</a>
           </div>
         </form>
       </div>
@@ -168,13 +113,25 @@
       </div>
     </div>
     <br>
-    <div class="ui borderless secondary menu" style="background-color: white;">
-      <a class="item">1</a>
-      <a class="item">2</a>
-      <a class="item">3</a>
-      <a class="item">4</a>
-      <a class="item">5</a>
-      <a class="item">6</a>
+    <div class="ui borderless secondary menu centered grid" style="background-color: white;margin:auto 100px;">
+      
+      <% if(currentPage === 1) { %> 
+        <a class="item disabled">First</a>
+        <a class="item disabled">Previous</a>
+      <% } else { %>
+        <a href="/books/1" class="item">First</a>
+        <a href="/books/<%= currentPage - 1 %>" class="item">Previous</a>
+      <% } %>
+      <% if(currentPage === lastPage) { %> 
+        <a class="item disabled">Next</a>
+        <a class="item disabled">Last</a>
+      <% } else { %>
+        <a href="/books/<%= currentPage + 1 %>" class="item">Next</a>
+        <a href="/books/<%= lastPage %>" class="item">Last</a>
+      <% } %>
+      
+      
+     
     </div>
 
    
