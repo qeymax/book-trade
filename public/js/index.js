@@ -1,4 +1,5 @@
 var $
+var location
 var ajaxBooks = []
 $(document).ready(function () {
   $('.ui.accordion').accordion()
@@ -26,8 +27,56 @@ $(document).ready(function () {
     function () {
       $('.ui.large.modal').modal('show')
       $('.segment').addClass('loading')
+      $('.requestTrade').text('Request Trade')
       $('.bookNameSpan').text($(this).children('h5').text())
+      $('.ui.large.modal').attr('id', $(this).attr('id'))
       getBookInfo($(this).attr('id'))
+    })
+
+  $('.cancelRequest').on('click',
+    function () {
+      cancelRequest($(this).parents('.item').attr('id'))
+      $(this).parents('.item').remove()
+    })
+
+  $('.acceptRequest').on('click',
+    function () {
+      acceptRequest($(this).parents('.item').attr('id'))
+      location.reload()
+    })
+
+  $('.completeRequest').on('click',
+    function () {
+      completeRequest($(this).parents('.item').attr('id'))
+      $(this).parents('.item').remove()
+    })
+
+  $('.counterRequest').on('click',
+    function () {
+      $('.chooseBookModal').modal('show')
+      $('#chooseBookGrid').html('')
+      $('#chooseBookSegment').addClass('loading')
+      var rId = $(this).parents('.item').attr('id')
+      $
+        .ajax({
+          url: '/requests/choose',
+          type: 'GET',
+          data: {
+            username: $(this).parents('.item').children('.senderUsername').val()
+          },
+          error: function (xhr, status, error) {
+            console.log(error)
+          },
+          success: function (result, status, xhr) {
+            counterRequestGet(result.books, rId)
+          }
+        })
+    })
+
+  $('.requestTrade').on('click',
+    function () {
+      $(this).addClass('loading')
+      requestTrade($(this).parents('.modal').attr('id'), this)
     })
 })
 
@@ -121,6 +170,124 @@ var getBookInfo = function (id) {
       success: function (result, status, xhr) {
         $('.segment').html(result)
         $('.segment').removeClass('loading')
+      }
+    })
+}
+
+var cancelRequest = function (id) {
+  $
+    .ajax({
+      url: '/requests/cancel',
+      type: 'POST',
+      data: {
+        id: id
+      },
+      error: function (xhr, status, error) {
+        console.log(error)
+      },
+      success: function (result, status, xhr) {
+
+      }
+    })
+}
+
+var acceptRequest = function (id) {
+  $
+    .ajax({
+      url: '/requests/accept',
+      type: 'POST',
+      data: {
+        id: id
+      },
+      error: function (xhr, status, error) {
+        console.log(error)
+      },
+      success: function (result, status, xhr) {
+
+      }
+    })
+}
+
+var completeRequest = function (id) {
+  $
+    .ajax({
+      url: '/requests/complete',
+      type: 'POST',
+      data: {
+        id: id
+      },
+      error: function (xhr, status, error) {
+        console.log(error)
+      },
+      success: function (result, status, xhr) {
+
+      }
+    })
+}
+
+var counterRequestGet = function (volumes, requestId) {
+  let html = ``
+  for (let volume of volumes) {
+    html += `<div class="sixteen wide mobile eight wide tablet four wide computer column">
+                    <div class="card counterCard">
+                    <input style="display:none" id="bookNumber" type="text" value="${volume._id}">
+                      <div class="image">
+                        <img class="thumbnail" src="${volume.thumbnail}"
+                        alt="">
+                      </div>
+                      <a href="#">
+                        <h5>${volume.title}</h5>
+                      </a>
+                    </div>
+                  </div>`
+  }
+  console.log(requestId)
+  $('#chooseBookGrid').html(html)
+  $('#chooseBookSegment').removeClass('loading')
+  $('.counterCard').on('click', function () {
+    $('.chooseBookModal').modal('hide')
+    let id = $(this).children('#bookNumber').val()
+    counterBook(id, requestId)
+  })
+}
+
+var counterBook = function (bookId, requestId) {
+  $
+    .ajax({
+      url: '/requests/choose',
+      type: 'POST',
+      data: {
+        bookId: bookId,
+        requestId: requestId
+      },
+      error: function (xhr, status, error) {
+        console.log(error)
+      },
+      success: function (result, status, xhr) {
+        location.reload()
+      }
+    })
+}
+
+var requestTrade = function (id, button) {
+  $
+    .ajax({
+      url: '/requests',
+      type: 'POST',
+      data: {
+        id: id
+      },
+      error: function (xhr, status, error) {
+        console.log(error)
+      },
+      success: function (result, status, xhr) {
+        if (result.length > 50) {
+          $(button).removeClass('loading')
+          $(button).text('Please Login')
+        } else {
+          $(button).removeClass('loading')
+          $(button).text(result)
+        }
       }
     })
 }
