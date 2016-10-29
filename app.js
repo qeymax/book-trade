@@ -10,6 +10,7 @@ var flash = require('connect-flash')
 
 var User = require('./models/user')
 var Request = require('./models/request')
+var Meta = require('./models/meta')
 
 var indexRoutes = require('./routes/index')
 var booksRoutes = require('./routes/books')
@@ -70,6 +71,23 @@ app.use(function (req, res, next) {
     next()
   }
 })
+
+// Creates a meta file if there is none in the db
+Meta
+  .find({}, function (err, metas) {
+    if (err) {
+      console.log(err)
+    } else {
+      if (!metas) {
+        var meta = new Meta({
+          name: 'meta',
+          languages: [],
+          genres: []
+        })
+        meta.save()
+      }
+    }
+  })
 
 app.use(indexRoutes)
 app.use(booksRoutes)
