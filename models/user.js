@@ -7,15 +7,7 @@ var userSchema = new Schema({
   password: String,
   fullname: String,
   email: String,
-  country: String,
-  sentRequests: [{
-    type: Schema.Types.ObjectId,
-    ref: 'Request'
-  }],
-  recievedRequests: [{
-    type: Schema.Types.ObjectId,
-    ref: 'Request'
-  }]
+  country: String
 })
 userSchema.plugin(passportLocalMongoose)
 var userModel = mongoose.model('User', userSchema)

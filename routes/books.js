@@ -3,8 +3,7 @@ var request = require('request')
 var middleware = require('../middleware')
 var Book = require('../models/book')
 var Meta = require('../models/meta')
-  // var path = require('path')
-  // var passport = require('passport')
+var Request = require('../models/request')
 
 router.route('/books')
   .get(function (req, res) {
@@ -50,6 +49,39 @@ router.route('/books')
           }
         })
       res.end()
+    })
+  .delete(middleware.isLoggedIn,
+    function (req, res) {
+      Book
+        .remove({
+          _id: req.body.id
+        }, function (err) {
+          if (err) {
+            console.log(err)
+          } else {
+            Request
+              .remove({
+                $and: [{
+                  status: {
+                    $ne: 'completed'
+                  }
+                }, {
+                  $or: [{
+                    senderBook: req.body.id
+                  }, {
+                    recieverBook: req.body.id
+                  }]
+                }]
+              })
+              .exec(function (err) {
+                if (err) {
+                  console.log(err)
+                } else {
+                  res.end()
+                }
+              })
+          }
+        })
     })
 
 router.route('/addbooks')

@@ -26,7 +26,7 @@ $(document).ready(function () {
   $('.bookCard').on('click',
     function () {
       $('.ui.large.modal').modal('show')
-      $('.segment').addClass('loading')
+      $('#bookInfoSegment').addClass('loading')
       $('.requestTrade').text('Request Trade')
       $('.bookNameSpan').text($(this).children('h5').text())
       $('.ui.large.modal').attr('id', $(this).attr('id'))
@@ -77,6 +77,13 @@ $(document).ready(function () {
       $(this).addClass('loading')
       requestTrade($(this).parents('.modal').attr('id'), this)
     })
+  $('.deleteBook').on('click',
+    function () {
+      if (window.confirm('Are You Sure ?????!!!!')) {
+        $(this).addClass('loading')
+        deleteBook($(this).parents('.modal').attr('id'), this)
+      }
+    })
 })
 
 var getBooks = function (bookName) {
@@ -125,17 +132,20 @@ var showBooks = function (volumes) {
     let i = $(this).children('#bookNumber').val()
     let html = ``
     html += `<div class="sixteen wide mobile eight wide tablet four wide computer column">
-                    <div id="<%= volume._id %>" class="card bookCard">
+                    <div id="" class="card newCard">
                       <div class="image">
                         <img class="thumbnail" src="${ajaxBooks[i].thumbnail}"
                         alt="">
-                      </div>
-                      <a href="#">
+                      </div>                    
                         <h5>${ajaxBooks[i].title}</h5>
-                      </a>
                     </div>
                   </div>`
+    console.log(ajaxBooks[i])
     $('.booksGrid').prepend(html)
+    $('.newCard').on('click',
+      function () {
+        location.reload()
+      })
     sendBook(i)
   })
 }
@@ -167,8 +177,8 @@ var getBookInfo = function (id) {
         console.log(error)
       },
       success: function (result, status, xhr) {
-        $('.segment').html(result)
-        $('.segment').removeClass('loading')
+        $('#bookInfoSegment').html(result)
+        $('#bookInfoSegment').removeClass('loading')
       }
     })
 }
@@ -289,6 +299,25 @@ var requestTrade = function (id, button) {
           $(button).removeClass('loading')
           $(button).text(result)
         }
+      }
+    })
+}
+
+var deleteBook = function (id) {
+  $
+    .ajax({
+      url: '/books',
+      type: 'DELETE',
+      data: {
+        id: id
+      },
+      error: function (xhr, status, error) {
+        console.log(error)
+      },
+      success: function (result, status, xhr) {
+        $('.ui.large.modal').modal('hide')
+        $('.deleteBook').removeClass('loading')
+        $('#' + id + '.card').closest('.column').remove()
       }
     })
 }
