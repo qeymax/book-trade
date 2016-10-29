@@ -176,8 +176,8 @@ var getBookInfo = function (id) {
 var cancelRequest = function (id) {
   $
     .ajax({
-      url: '/requests/cancel',
-      type: 'POST',
+      url: '/requests',
+      type: 'DELETE',
       data: {
         id: id
       },

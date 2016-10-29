@@ -9,36 +9,36 @@
 
 <div class="ui middle aligned divided list">
 <% for(let request of requests){ %> 
-<%if (request.status !== 'completed') { %> 
-<% if(request.recieverSeen){ %>
-  <div id="<%= request._id %>" class="item" style="padding:10px;">
- <% } else { %> 
-  <div id="<%= request._id %>" class="item" style="background-color:white; padding:10px;">
- <% } %> 
- <input class="senderUsername" style="display:none;" value="<%= request.sender.username %>"></input>
- <% if(request.status === 'initial') { %>
-  <div class="right floated content">
-    <div class="ui red button cancelRequest">Cancel</div>
-  </div>
-  <div class="right floated content">
-    <div class="ui green button counterRequest">Choose Book</div>
-  </div>
-<% } else if (request.status === 'countered') { %> 
-  <div class="right floated content">
-    <div class="ui red button cancelRequest">Cancel</div>
-  </div>
-<% } else if (request.status === 'pending') { %> 
-  <div class="right floated content">
-    <h4><%= request.sender.email %></h4>
-  </div>
-  <div class="right floated content">
-    <div class="ui green button completeRequest">Mark as Complete</div>
-  </div>
-  <div class="right floated content">
-    <div class="ui red button cancelRequest">Cancel</div>
-  </div>
-<% } %>
-<% } %>
+  <%if (request.status !== 'completed') { %> 
+    <% if(request.recieverSeen){ %>
+      <div id="<%= request._id %>" class="item" style="padding:10px;">
+    <% } else { %> 
+      <div id="<%= request._id %>" class="item" style="background-color:white; padding:10px;">
+    <% } %> 
+    <input class="senderUsername" style="display:none;" value="<%= request.sender.username %>"></input>
+    <% if(request.status === 'initial') { %>
+      <div class="right floated content">
+        <div class="ui red button cancelRequest">Cancel</div>
+      </div>
+      <div class="right floated content">
+        <div class="ui green button counterRequest">Choose Book</div>
+      </div>
+    <% } else if (request.status === 'countered') { %> 
+      <div class="right floated content">
+        <div class="ui red button cancelRequest">Cancel</div>
+      </div>
+    <% } else if (request.status === 'pending') { %> 
+      <div class="right floated content">
+        <h4><%= request.sender.email %></h4>
+      </div>
+      <div class="right floated content">
+        <div class="ui green button completeRequest">Mark as Complete</div>
+      </div>
+      <div class="right floated content">
+        <div class="ui red button cancelRequest">Cancel</div>
+      </div>
+    <% } %>
+
     <span class="content" style="font-weight:bold;">
       Your &nbsp;
     </span>
@@ -52,18 +52,17 @@
       &nbsp;&nbsp; For  <span><%= request.sender.username %>'s</span> &nbsp;&nbsp;
     </span>
 
-  <% if(request.status === 'initial') { %>
-  ....
-  <% } else { %>
-    <img class="ui avatar image" src="<%= request.senderBook.thumbnail %>">
-    <div id="<%= request._id %>" class="content">
-      <a id="<%= request.senderBook._id %>" class="bookCard"><h5><%= request.senderBook.title %></h5></a>
-    </div> 
-  <% } %>
-
-    
+    <% if(request.status === 'initial') { %>
+      ....
+    <% } else { %>
+      <img class="ui avatar image" src="<%= request.senderBook.thumbnail %>">
+      <div id="<%= request._id %>" class="content">
+        <a id="<%= request.senderBook._id %>" class="bookCard"><h5><%= request.senderBook.title %></h5></a>
+      </div> 
+    <% } %>
+       
   </div>
-
+  <% } %>
 <% } %>
 </div>
 

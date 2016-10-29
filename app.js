@@ -9,6 +9,7 @@ var LocalStrategy = require('passport-local')
 var flash = require('connect-flash')
 
 var User = require('./models/user')
+var Request = require('./models/request')
 
 var indexRoutes = require('./routes/index')
 var booksRoutes = require('./routes/books')
@@ -47,7 +48,27 @@ app.use(function (req, res, next) {
   res.locals.currentUser = req.user
   res.locals.error = req.flash('error')
   res.locals.success = req.flash('success')
-  next()
+  if (req.isAuthenticated()) {
+    Request
+      .count({
+        $or: [{
+          sender: req.user._id,
+          senderSeen: false
+        }, {
+          reciever: req.user._id,
+          recieverSeen: false
+        }]
+      }, function (err, count) {
+        if (err) {
+          console.log(err)
+        } else {
+          res.locals.requestsCount = count
+          next()
+        }
+      })
+  } else {
+    next()
+  }
 })
 
 app.use(indexRoutes)

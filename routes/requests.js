@@ -13,7 +13,10 @@ router.route('/requests')
     function (req, res) {
       Request
         .findOne({
-          recieverBook: req.body.id
+          recieverBook: req.body.id,
+          status: {
+            $ne: 'completed'
+          }
         })
         .exec(function (err, request) {
           if (err) {
@@ -63,6 +66,7 @@ router.route('/requests')
               console.log(err)
             } else {
               request.status = 'pending'
+              request.recieverSeen = false
               request.save()
               res.end()
             }
@@ -101,8 +105,38 @@ router.route('/requests')
                   }
                 })
               request.status = 'completed'
-              request.save()
-              res.end()
+              request.save(function (err, savedRequest, num) {
+                if (err) {
+                  console.log(err)
+                } else {
+                  Request
+                    .remove({
+                      $and: [{
+                        status: {
+                          $ne: 'completed'
+                        }
+                      }, {
+                        $or: [{
+                          senderBook: request.senderBook
+
+                        }, {
+                          senderBook: request.recieverBook
+                        }, {
+                          recieverBook: request.senderBook
+                        }, {
+                          recieverBook: request.recieverBook
+                        }]
+                      }]
+                    })
+                    .exec(function (err) {
+                      if (err) {
+                        console.log(err)
+                      } else {
+                        res.end()
+                      }
+                    })
+                }
+              })
             }
           })
       }
@@ -139,8 +173,13 @@ router.route('/requests/sent')
           if (err) {
             console.log(err)
           } else {
+            let tempRequests = JSON.parse(JSON.stringify(requests))
+            for (let request of requests) {
+              request.senderSeen = true
+              request.save()
+            }
             res.render('sent-requests', {
-              requests: requests
+              requests: tempRequests
             })
           }
         })
@@ -163,8 +202,13 @@ router.route('/requests/recieved')
           if (err) {
             console.log(err)
           } else {
+            let tempRequests = JSON.parse(JSON.stringify(requests))
+            for (let request of requests) {
+              request.recieverSeen = true
+              request.save()
+            }
             res.render('recieved-requests', {
-              requests: requests
+              requests: tempRequests
             })
           }
         })
@@ -212,6 +256,7 @@ router.route('/requests/choose')
               .findOneAndUpdate({
                 _id: req.body.requestId
               }, {
+                senderSeen: false,
                 status: 'countered',
                 senderBook: book
               }, function (err, request) {
