@@ -55,7 +55,7 @@
             </div>
             <div class="content">
               <div class="grouped fields">
-              <% for (let genre of genres) { %> 
+              <% for (var genre of genres) { %> 
               <div class="field">
                   <div class="ui checkbox">
                     <input type="checkbox" name="genre" value="<%= genre %>" tabindex="0" class="hidden">
@@ -71,7 +71,7 @@
             </div>
             <div class="content">
               <div class="grouped fields">
-              <% for (let language of languages) { %> 
+              <% for (var language of languages) { %> 
               <div class="field">
                   <div class="ui checkbox">
                     <input type="checkbox" name="language" value="<%= language %>" tabindex="0" class="hidden">

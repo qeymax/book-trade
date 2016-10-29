@@ -99,7 +99,7 @@ var getBooks = function (bookName) {
       success: function (result, status, xhr) {
         if (typeof result !== 'object') {
           $('#addNewBookSegment').removeClass('loading')
-          let html = `<h1>You need to logged in to do that.</h1>`
+          var html = `<h1>You need to logged in to do that.</h1>`
           $('#addNewBookGrid').html(html)
         } else {
           ajaxBooks = result.volumes
@@ -111,8 +111,8 @@ var getBooks = function (bookName) {
 }
 
 var showBooks = function (volumes) {
-  let html = ``
-  for (let volume of volumes) {
+  var html = ``
+  for (var volume of volumes) {
     html += `<div class="sixteen wide mobile eight wide tablet four wide computer column">
                     <div class="card choiceCard">
                     <input style="display:none" id="bookNumber" type="text" value="${volumes.indexOf(volume)}">
@@ -129,8 +129,8 @@ var showBooks = function (volumes) {
   $('#addNewBookGrid').html(html)
   $('.choiceCard').on('click', function () {
     $('.modal').modal('hide')
-    let i = $(this).children('#bookNumber').val()
-    let html = ``
+    var i = $(this).children('#bookNumber').val()
+    var html = ``
     html += `<div class="sixteen wide mobile eight wide tablet four wide computer column">
                     <div id="" class="card newCard">
                       <div class="image">
@@ -237,8 +237,8 @@ var completeRequest = function (id) {
 }
 
 var counterRequestGet = function (volumes, requestId) {
-  let html = ``
-  for (let volume of volumes) {
+  var html = ``
+  for (var volume of volumes) {
     html += `<div class="sixteen wide mobile eight wide tablet four wide computer column">
                     <div class="card counterCard">
                     <input style="display:none" id="bookNumber" type="text" value="${volume._id}">
@@ -257,7 +257,7 @@ var counterRequestGet = function (volumes, requestId) {
   $('#chooseBookSegment').removeClass('loading')
   $('.counterCard').on('click', function () {
     $('.chooseBookModal').modal('hide')
-    let id = $(this).children('#bookNumber').val()
+    var id = $(this).children('#bookNumber').val()
     counterBook(id, requestId)
   })
 }

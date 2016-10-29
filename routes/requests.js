@@ -173,8 +173,8 @@ router.route('/requests/sent')
           if (err) {
             console.log(err)
           } else {
-            let tempRequests = JSON.parse(JSON.stringify(requests))
-            for (let request of requests) {
+            var tempRequests = JSON.parse(JSON.stringify(requests))
+            for (var request of requests) {
               request.senderSeen = true
               request.save()
             }
@@ -202,8 +202,8 @@ router.route('/requests/recieved')
           if (err) {
             console.log(err)
           } else {
-            let tempRequests = JSON.parse(JSON.stringify(requests))
-            for (let request of requests) {
+            var tempRequests = JSON.parse(JSON.stringify(requests))
+            for (var request of requests) {
               request.recieverSeen = true
               request.save()
             }

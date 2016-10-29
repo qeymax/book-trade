@@ -11,7 +11,7 @@ router.route('/books')
   })
   .post(middleware.isLoggedIn,
     function (req, res) {
-      let newBook = new Book({
+      var newBook = new Book({
         title: req.body.title,
         author: req.body.author,
         genre: req.body.genre,
@@ -37,7 +37,7 @@ router.route('/books')
           if (err) {
             console.log(err)
           } else {
-            for (let gen of req.body.genre) {
+            for (var gen of req.body.genre) {
               if (meta.genres.indexOf(gen) === -1) {
                 meta.genres.push(gen)
               }
@@ -87,26 +87,26 @@ router.route('/books')
 router.route('/addbooks')
   .get(middleware.isLoggedIn,
     function (req, res) {
-      let bookName = req.query.bookname
+      var bookName = req.query.bookname
       if (bookName) {
-        let url = `https://www.googleapis.com/books/v1/volumes?q=${bookName}&maxResults=3&key=AIzaSyBhCDWa_59Ncnq-HbtSNstn68RKkOSPXQY`
+        var url = `https://www.googleapis.com/books/v1/volumes?q=${bookName}&maxResults=3&key=AIzaSyBhCDWa_59Ncnq-HbtSNstn68RKkOSPXQY`
         request(url, function (err, response, body) {
           if (err) {
             console.log(err)
           }
-          let obj = JSON.parse(body)
+          var obj = JSON.parse(body)
           var volumes = []
-          for (let item of obj.items) {
-            let volumeInfo = item.volumeInfo
+          for (var item of obj.items) {
+            var volumeInfo = item.volumeInfo
             var thumbnail = '/img/default-cover.jpg'
             if (volumeInfo.imageLinks) {
               thumbnail = volumeInfo.imageLinks.thumbnail.split('&')
               thumbnail[3] = 'zoom=2'
               thumbnail = thumbnail.join('&')
             }
-            let subtitle = volumeInfo.subtitle ? ' - ' + volumeInfo.subtitle : ''
-            let description = volumeInfo.description ? volumeInfo.description.substring(0, 200) + '....' : ''
-            let volume = {
+            var subtitle = volumeInfo.subtitle ? ' - ' + volumeInfo.subtitle : ''
+            var description = volumeInfo.description ? volumeInfo.description.substring(0, 200) + '....' : ''
+            var volume = {
               title: volumeInfo.title.split('-')[0] + subtitle,
               author: volumeInfo.authors,
               genre: volumeInfo.categories,

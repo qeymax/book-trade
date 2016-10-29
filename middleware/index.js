@@ -10,12 +10,12 @@ middlewareObj.isLoggedIn = function (req, res, next) {
 }
 
 middlewareObj.checkRegister = function (req, res, next) {
-  let password = req.body.password
-  let repeatPassword = req.body.repeatpassword
-  let email = req.body.email
-  let country = req.body.country
-  let fullname = req.body.fullname
-  let terms = req.body.terms
+  var password = req.body.password
+  var repeatPassword = req.body.repeatpassword
+  var email = req.body.email
+  var country = req.body.country
+  var fullname = req.body.fullname
+  var terms = req.body.terms
 
   if (emailExisted(email)) {
     req.flash('error', 'Email Already Existed')
@@ -39,11 +39,11 @@ middlewareObj.checkRegister = function (req, res, next) {
 }
 
 middlewareObj.checkProfile = function (req, res, next) {
-  let newPassword = req.body.newpassword
-  let repeatPassword = req.body.repeatpassword
-  let email = req.body.email
-  let country = req.body.country
-  let fullname = req.body.fullname
+  var newPassword = req.body.newpassword
+  var repeatPassword = req.body.repeatpassword
+  var email = req.body.email
+  var country = req.body.country
+  var fullname = req.body.fullname
 
   if (emailExistedProfile(req.user.email, email)) {
     req.flash('error', 'Email Already Existed')
