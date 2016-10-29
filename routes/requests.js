@@ -51,6 +51,76 @@ router.route('/requests')
           }
         })
     })
+  .put(middleware.isLoggedIn,
+    function (req, res) {
+      if (req.body.op === 'accept') {
+        Request
+          .findOne({
+            _id: req.body.id
+          })
+          .exec(function (err, request) {
+            if (err) {
+              console.log(err)
+            } else {
+              request.status = 'pending'
+              request.save()
+              res.end()
+            }
+          })
+      } else if (req.body.op === 'complete') {
+        Request
+          .findOne({
+            _id: req.body.id
+          })
+          .exec(function (err, request) {
+            if (err) {
+              console.log(err)
+            } else {
+              Book
+                .findOne({
+                  _id: request.senderBook
+                })
+                .exec(function (err, book) {
+                  if (err) {
+                    console.log(err)
+                  } else {
+                    book.user = request.reciever
+                    book.save()
+                  }
+                })
+              Book
+                .findOne({
+                  _id: request.recieverBook
+                })
+                .exec(function (err, book) {
+                  if (err) {
+                    console.log(err)
+                  } else {
+                    book.user = request.sender
+                    book.save()
+                  }
+                })
+              request.status = 'completed'
+              request.save()
+              res.end()
+            }
+          })
+      }
+    })
+  .delete(middleware.isLoggedIn,
+    function (req, res) {
+      Request
+        .remove({
+          _id: req.body.id
+        })
+        .exec(function (err) {
+          if (err) {
+            console.log(err)
+          } else {
+            res.end()
+          }
+        })
+    })
 
 router.route('/requests/sent')
   .get(middleware.isLoggedIn,
@@ -151,91 +221,6 @@ router.route('/requests/choose')
                   res.end()
                 }
               })
-          }
-        })
-    })
-
-router.route('/requests/cancel')
-  .get(function (req, res) {
-
-  })
-  .post(middleware.isLoggedIn,
-    function (req, res) {
-      Request
-        .remove({
-          _id: req.body.id
-        })
-        .exec(function (err) {
-          if (err) {
-            console.log(err)
-          } else {
-            res.end()
-          }
-        })
-    })
-
-router.route('/requests/accept')
-  .get(function (req, res) {
-
-  })
-  .post(middleware.isLoggedIn,
-    function (req, res) {
-      Request
-        .findOne({
-          _id: req.body.id
-        })
-        .exec(function (err, request) {
-          if (err) {
-            console.log(err)
-          } else {
-            request.status = 'pending'
-            request.save()
-            res.end()
-          }
-        })
-    })
-
-router.route('/requests/complete')
-  .get(function (req, res) {
-
-  })
-  .post(middleware.isLoggedIn,
-    function (req, res) {
-      Request
-        .findOne({
-          _id: req.body.id
-        })
-        .exec(function (err, request) {
-          if (err) {
-            console.log(err)
-          } else {
-            Book
-              .findOne({
-                _id: request.senderBook
-              })
-              .exec(function (err, book) {
-                if (err) {
-                  console.log(err)
-                } else {
-                  book.user = request.reciever
-                  book.save()
-                }
-              })
-            Book
-              .findOne({
-                _id: request.recieverBook
-              })
-              .exec(function (err, book) {
-                if (err) {
-                  console.log(err)
-                } else {
-                  book.user = request.sender
-                  book.save()
-                }
-              })
-            request.status = 'completed'
-            request.save()
-            res.end()
           }
         })
     })

@@ -42,7 +42,6 @@ $(document).ready(function () {
   $('.acceptRequest').on('click',
     function () {
       acceptRequest($(this).parents('.item').attr('id'))
-      location.reload()
     })
 
   $('.completeRequest').on('click',
@@ -194,16 +193,17 @@ var cancelRequest = function (id) {
 var acceptRequest = function (id) {
   $
     .ajax({
-      url: '/requests/accept',
-      type: 'POST',
+      url: '/requests',
+      type: 'PUT',
       data: {
-        id: id
+        id: id,
+        op: 'accept'
       },
       error: function (xhr, status, error) {
         console.log(error)
       },
       success: function (result, status, xhr) {
-
+        location.reload()
       }
     })
 }
@@ -211,10 +211,11 @@ var acceptRequest = function (id) {
 var completeRequest = function (id) {
   $
     .ajax({
-      url: '/requests/complete',
-      type: 'POST',
+      url: '/requests',
+      type: 'PUT',
       data: {
-        id: id
+        id: id,
+        op: 'complete'
       },
       error: function (xhr, status, error) {
         console.log(error)
