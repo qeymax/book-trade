@@ -136,7 +136,7 @@ var showBooks = function (volumes) {
                       <div class="image">
                         <img class="thumbnail" src="${ajaxBooks[i].thumbnail}"
                         alt="">
-                      </div>                    
+                      </div>
                         <h5>${ajaxBooks[i].title}</h5>
                     </div>
                   </div>`
@@ -159,9 +159,7 @@ var sendBook = function (index) {
       error: function (xhr, status, error) {
         console.log(error)
       },
-      success: function (result, status, xhr) {
-
-      }
+      success: function (result, status, xhr) {}
     })
 }
 
@@ -194,9 +192,7 @@ var cancelRequest = function (id) {
       error: function (xhr, status, error) {
         console.log(error)
       },
-      success: function (result, status, xhr) {
-
-      }
+      success: function (result, status, xhr) {}
     })
 }
 
@@ -230,9 +226,7 @@ var completeRequest = function (id) {
       error: function (xhr, status, error) {
         console.log(error)
       },
-      success: function (result, status, xhr) {
-
-      }
+      success: function (result, status, xhr) {}
     })
 }
 
